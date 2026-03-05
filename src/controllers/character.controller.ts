@@ -1,7 +1,7 @@
 import type { Request, Response, NextFunction } from 'express';
 import characterService = require('../services/character.service');
-const { getCharacters } = characterService;
 import errorMiddleware = require('../middlewares/error.middleware');
+const { getCharacters } = characterService;
 const { AppError } = errorMiddleware;
 
 const VALID_STATUS = ['alive', 'dead', 'unknown']
@@ -12,7 +12,7 @@ const listCharacters = async (
   next: NextFunction
 ) => {
   try {
-    const { name, status, species, page } = req.query as Record<string, string>
+    const { name, status, species, page } = req.query as unknown as Record<string, string | undefined>
 
     if (status && !VALID_STATUS.includes(status.toLowerCase())) {
       throw new AppError(

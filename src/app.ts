@@ -1,5 +1,23 @@
 import express = require('express');
 import type { Request, Response } from 'express';
-const app = express();
-app.get('/', (req: Request, res: Response) => res.send('Hola TypeScript'));
-app.listen(3000, () => console.log('Servidor en http://localhost:3000'));
+import type {cors} = require('cors');
+import env = require('./config/env');
+const { ENV } = env;
+import type {characterRoutes} = require('./routes/character.routes');
+import errorMiddleware = require('./middlewares/error.middleware');
+const { errorHandler } = errorMiddleware;
+
+const app = express()
+
+app.use(cors({ origin: ENV.FRONTEND_URL }))
+app.use(express.json())
+
+app.use('/api', characterRoutes)
+
+app.get('/health', (_, res) => res.json({ status: 'ok' }))
+
+app.use(errorHandler)
+
+app.listen(ENV.PORT, () => {
+  console.log(`Server running on port ${ENV.PORT}`)
+})
