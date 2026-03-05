@@ -4,7 +4,7 @@ import errorMiddleware = require('../middlewares/error.middleware');
 const { getCharacters } = characterService;
 const { AppError } = errorMiddleware;
 
-const VALID_STATUS = ['alive', 'dead', 'unknown']
+const VALID_STATUS = ['alive', 'dead', 'unknown'];
 
 const listCharacters = async (
   req: Request,
@@ -12,26 +12,28 @@ const listCharacters = async (
   next: NextFunction
 ) => {
   try {
-    const { name, status, species, page } = req.query as unknown as Record<string, string | undefined>
+    const { name, status, species, page } = req.query as Record<string, string>;
 
     if (status && !VALID_STATUS.includes(status.toLowerCase())) {
-      throw new AppError(
-        'INVALID_STATUS',
-        'El valor de status no es válido',
-        400,
-        {
-          campo: 'status',
-          valor_recibido: status,
-          valores_validos: VALID_STATUS,
-        }
-      )
+      return next(
+        new AppError(
+          'INVALID_STATUS',
+          'El valor de status no es válido',
+          400,
+          {
+            campo: 'status',
+            valor_recibido: status,
+            valores_validos: VALID_STATUS,
+          }
+        )
+      );
     }
 
-    const data = await getCharacters({ name, status, species, page })
-    res.json(data)
+    const data = await getCharacters({ name, status, species, page });
+    return res.json(data);
   } catch (error) {
-    next(error)
+    return next(error);
   }
-}
+};
 
 export = { listCharacters };
