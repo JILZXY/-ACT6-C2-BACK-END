@@ -29,10 +29,10 @@ const toDTO = (raw: RawCharacter): CharacterDTO => ({
 })
 
 const getCharacters = async (params: {
-  name?: string
-  status?: string
-  species?: string
-  page?: string
+  name?: string | undefined
+  status?: string | undefined
+  species?: string | undefined
+  page?: string | undefined
 }): Promise<CharacterListDTO> => {
   const query = new URLSearchParams()
   if (params.name)    query.append('name', params.name)
