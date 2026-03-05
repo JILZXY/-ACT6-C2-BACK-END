@@ -1,9 +1,9 @@
 import express = require('express');
 import type { Request, Response } from 'express';
-import type {cors} = require('cors');
 import env = require('./config/env');
 const { ENV } = env;
-import type {characterRoutes} = require('./routes/character.routes');
+import cors = require('cors');
+import characterRoutes = require('./routes/character.routes');
 import errorMiddleware = require('./middlewares/error.middleware');
 const { errorHandler } = errorMiddleware;
 
