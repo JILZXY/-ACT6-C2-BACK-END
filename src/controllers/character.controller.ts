@@ -1,10 +1,12 @@
-import { Request, Response, NextFunction } from 'express'
-import { getCharacters } from '../services/character.service'
-import { AppError } from '../middlewares/error.middleware'
+import type { Request, Response, NextFunction } from 'express';
+import characterService = require('../services/character.service');
+const { getCharacters } = characterService;
+import errorMiddleware = require('../middlewares/error.middleware');
+const { AppError } = errorMiddleware;
 
 const VALID_STATUS = ['alive', 'dead', 'unknown']
 
-export const listCharacters = async (
+const listCharacters = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -31,3 +33,5 @@ export const listCharacters = async (
     next(error)
   }
 }
+
+export = { listCharacters };

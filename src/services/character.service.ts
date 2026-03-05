@@ -1,6 +1,8 @@
 import env = require('../config/env');
 const { ENV } = env;
 import type { CharacterDTO, CharacterListDTO } from '../dtos/character.dto';
+import errorMiddleware = require('../middlewares/error.middleware');
+const { AppError } = errorMiddleware;
 
 interface RawCharacter {
   id: number
@@ -47,7 +49,15 @@ const getCharacters = async (params: {
     if (response.status === 404) {
       return { info: { count: 0, pages: 0, next: null, prev: null }, results: [] }
     }
-    throw new Error(`Error from Rick and Morty API: ${response.status}`)
+    throw new AppError(
+        'EXTERNAL_API_ERROR',
+        'Error al conectar con el servicio externo',
+        502,
+        {
+            campo: 'rick_and_morty_api',
+            status_code: response.status,
+        }
+    )
   }
 
   const data: RawResponse = await response.json()
