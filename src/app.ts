@@ -9,6 +9,7 @@ const { errorHandler } = errorMiddleware;
 
 const app = express()
 
+
 app.use(cors({ origin: ENV.FRONTEND_URL }))
 app.use(express.json())
 
